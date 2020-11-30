@@ -196,6 +196,28 @@ void Adafruit_PWMServoDriver::setOutputMode(bool totempole) {
 }
 
 /*!
+ *  @brief  Set PCA9685 invert mode.
+ *  Invert is most often used when in open drain mode.
+ *  @param  set invert true to invert on/off states.
+ */
+void Adafruit_PWMServoDriver::setInvertMode(bool invert) {
+  uint8_t oldmode = read8(PCA9685_MODE2);
+  uint8_t newmode;
+  if (invert) {
+    newmode = oldmode | MODE2_INVRT;
+  } else {
+    newmode = oldmode & ~MODE2_INVRT;
+  }
+  write8(PCA9685_MODE2, newmode);
+#ifdef ENABLE_DEBUG_OUTPUT
+  Serial.print("Setting invert mode: ");
+  Serial.print(invert ? "on" : "off");
+  Serial.print(" by setting MODE2 to ");
+  Serial.println(newmode);
+#endif
+}
+
+/*!
  *  @brief  Reads set Prescale from PCA9685
  *  @return prescale value
  */
